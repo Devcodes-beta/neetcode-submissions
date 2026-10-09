@@ -1,49 +1,39 @@
 class Solution {
 
     public String encode(List<String> strs) {
-        StringBuilder encoded=new StringBuilder();
-        String result="";
-        if(strs.size()==0)
-        return "";
-        for(String s:strs)
-        {
-            encoded=encoded.append(s.length());
-            encoded=encoded.append("#");
-            encoded=encoded.append(s);
-        }
-        result=encoded.toString();
-        return result;
+        StringBuilder sb = new StringBuilder();
 
+        for (String s : strs) {
+            sb.append(s.length()).append("#");
+            sb.append(s);
+        }
+
+        return sb.toString();
     }
 
     public List<String> decode(String str) {
-        List<String> list=new ArrayList<>();
-        if(str.length()==0)
-        return new ArrayList<>();
-        StringBuilder decode=new StringBuilder();
-        for(int i=0;i<str.length();i++)
-        {
-            while(str.charAt(i)!='#'){
-            decode=decode.append(str.charAt(i));
+        List<String> list = new ArrayList<>();
+        int i = 0;
 
-            i++;
-            }
-            //Extracting length
-            int length=Integer.parseInt(decode.toString());
-            i++;
-            //Empty decode
-            decode.setLength(0);
-            //Moving forward
-            for(int count=0;count<length;count++)
-            {
-                decode.append(str.charAt(i+count));
-            }
-            i=i+length-1;
-            list.add(decode.toString());
-            decode.setLength(0);
+        while (i < str.length()) {
+            int j = i;
 
+            // Find the delimiter after the length
+            while (str.charAt(j) != '#') {
+                j++;
+            }
+
+            // Extract the length
+            int length = Integer.parseInt(str.substring(i, j));
+
+            // Extract the original string
+            String word = str.substring(j + 1, j + 1 + length);
+            list.add(word);
+
+            // Move to the next encoded string
+            i = j + 1 + length;
         }
-        return list;
 
+        return list;
     }
 }
